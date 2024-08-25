@@ -1,4 +1,4 @@
-import React, { useState, useEffect} from 'react';
+import React, { useState} from 'react';
 import { Button, Col, Container, Form, Row } from 'react-bootstrap';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
@@ -14,21 +14,33 @@ function ContactForm() {
         message: Yup.string().required('Message is required'),
       });
 
-    const [isLoading, setLoading] = useState(false);
+      const [isLoading, setLoading] = useState(false);
 
-    useEffect(() =>{
-        function Request() {
-            return new Promise((resolve) => setTimeout(resolve, 2000))
-        }
-
-        if(isLoading){
-            Request().then(() => {
-                setLoading(false);
-            })
-        }
-    }, [isLoading]);
-
-    const handleClick = () => setLoading(true)
+      const submitData = async (values, { resetForm }) => {
+          setLoading(true);
+          const { category, location, name, phone, address, message } = values;
+  
+          if (category && location && name && phone && address && message) {
+              const res = await fetch("https://final-project-a3f36-default-rtdb.firebaseio.com/userDataRecord.json", {
+                  method: "POST",
+                  headers: {
+                      "Content-Type": "application/json",
+                  },
+                  body: JSON.stringify({
+                      category, location, name, phone, address, message
+                  })
+              });
+  
+              if (res) {
+                  resetForm();
+                  alert("Data Stored");
+              }
+          } else {
+              alert("Please fill all the data");
+          }
+  
+          setLoading(false);
+      };
 
     return (
         <>
@@ -45,12 +57,9 @@ function ContactForm() {
                 </Row>
                 <Container fluid className=' p-5'>
                     <Formik
-                        initialValues={{ category: '', location: '', name: '', phone: '', address: '', message: '' }}
+                        initialValues={{category: '', location: '', name: '', phone: '', address: '', message: ''}}
                         validationSchema={validationSchema}
-                        onSubmit={(values, { setSubmitting }) => {
-                        console.log('Form Data:', values);
-                        setSubmitting(false);
-                        }}
+                        onSubmit={submitData}
                     >
                         {({
                              handleSubmit,
@@ -61,7 +70,7 @@ function ContactForm() {
                              touched,
                              isSubmitting,
                         }) => (
-                            <Form onSubmit={handleSubmit} className='form'>
+                            <Form onSubmit={handleSubmit} method="POST" className='form'>
                                 <Row>
                                     <Col md={6} sm={12} className='mb-3'>
                                         <Form.Group controlId='formCategory'>
@@ -164,7 +173,7 @@ function ContactForm() {
                                     </Col>
                                 </Row>
                                 <div className='text-center'>
-                                    <Button type='submit' disabled={isLoading} onClick={!isLoading ? handleClick : isSubmitting}>
+                                    <Button type='submit' disabled={isLoading}>
                                         {isLoading ? 'Submiting...': 'Submit'}
                                     </Button>
                                 </div>

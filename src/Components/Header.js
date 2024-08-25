@@ -38,7 +38,7 @@ function Header() {
                     <Nav.Link as={NavLink} to="/contact">Contact Us</Nav.Link>
                 </Nav>
                 <NavDropdown title="SOS" id="basic-nav-dropdown" className="ml-3 mr-3 btn btn-danger">
-                    <NavDropdown.Item as={NavLink} to="/signup">Sign Up</NavDropdown.Item>
+                    {/* <NavDropdown.Item as={NavLink} to="/signup">Sign Up</NavDropdown.Item> */}
                     <NavDropdown.Item as={NavLink} to="/signin">Sign In</NavDropdown.Item>
                 </NavDropdown>
                 <Form className="d-flex">

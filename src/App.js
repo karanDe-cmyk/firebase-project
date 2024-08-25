@@ -17,6 +17,8 @@ import Sexual from './Components/Sexual';
 import Workplace from './Components/Workplace';
 import Childeren from './Components/Childeren';
 import Traficking from './Components/Traficking';
+import SignInForm from './Components/SignInForm';
+import SignUpForm from './Components/SignUpForm';
 
 
 function App() {
@@ -39,6 +41,9 @@ function App() {
             <Route path='workplace' element={<Workplace />} />
             <Route path='childeren' element={<Childeren />} />
             <Route path='traficking' element={<Traficking />} />
+          </Route>
+          <Route path='/signin' element={<SignInForm />}>
+            <Route path='signup' element={<SignUpForm />} />
           </Route>
         </Routes>
       </Router>
